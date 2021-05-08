@@ -19,6 +19,10 @@ class Hand {
       handCards[i].drawCard();
     }
   }
+  public void showHiddenCards() {
+    image(backImage, this.x, this.y);
+    image(backImage, this.x+73, this.y);
+  }
   public void showAllCards() {
     for (int i=0; i < 7; i++) {
       allCards[i].goTo((i*73), 500);

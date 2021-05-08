@@ -1,4 +1,5 @@
 PImage[] pictures = new PImage[52];
+PImage backImage;
 Deck deck;
 Hand hand;
 Hand cpu1;
@@ -24,6 +25,7 @@ GameStates currentState = GameStates.PASSCARDS;
 void setup() {
   size(800, 800);
   String folderpath = sketchPath();
+  backImage = loadImage(folderpath + "/redback.jpg");
   PImage diamonds = loadImage(folderpath + "/diamonds-cards.jpg");
   PImage clubs = loadImage(folderpath + "/clubs-cards.jpg");
   PImage hearts = loadImage(folderpath + "/hearts-cards.jpg");
@@ -69,6 +71,11 @@ void draw() {
     cpu2.pickupCards(deck.passCard(), deck.passCard());
     cpu3.pickupCards(deck.passCard(), deck.passCard());
     currentState = GameStates.OPTIONS;
+    gameTable.pot += 40;
+    hand.money -= 10;
+    cpu1.money -= 10;
+    cpu2.money -= 10;
+    cpu3.money -= 10;
     break;
   case TURN1:
     Card card3 = deck.passCard();
@@ -76,26 +83,35 @@ void draw() {
     Card card5 = deck.passCard();
     gameTable.placeCards1(card3, card4, card5);
     currentState = GameStates.OPTIONS;
+    gameTable.currentBet += floor(random(0, 10))*10;
     break;
   case TURN2:
     Card card6 = deck.passCard();
     gameTable.placeCards2(card6);
     currentState = GameStates.OPTIONS;
+    gameTable.currentBet += floor(random(0, 10))*10;
     break;
   case TURN3:
     Card card7 = deck.passCard();
     gameTable.placeCards3(card7);
     currentState = GameStates.OPTIONS;
+    gameTable.currentBet += floor(random(0, 10))*10;
     break;
   case RESULTS:
     buttonReplay.drawButton();
     if (buttonReplay.clicked()) {
       currentState = GameStates.PASSCARDS;
     }
+    cpu1.showHandCard();
+    cpu2.showHandCard();
+    cpu3.showHandCard();
     //hand.handValue();
     //fill(255);
     //text(hand.value, 700,750);
     //hand.showAllCards();
+    if (hand.money < 0) {
+      noLoop();
+    }
     break;
   case OPTIONS:
     text(gameTable.currentBet, 350, 550);
@@ -146,12 +162,12 @@ void draw() {
     if (buttonAddBet100.clicked()) {
       gameTable.currentBet +=100;
     }
+    cpu1.showHiddenCards();
+    cpu2.showHiddenCards();
+    cpu3.showHiddenCards();
     break;
   }
   hand.showHandCard();
-  cpu1.showHandCard();
-  cpu2.showHandCard();
-  cpu3.showHandCard();
   gameTable.showTableCard();
   mouseClicked = false;
 }

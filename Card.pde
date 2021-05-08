@@ -34,4 +34,3 @@ class Card {
     image(this.cardImage,x, y);
   }
 }
-//FIX THE ACE IT IS ONLY VALUE 1
